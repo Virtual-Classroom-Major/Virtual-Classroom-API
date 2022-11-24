@@ -28,6 +28,10 @@ module.exports = (sequelize, Sequelize) => {
         type: Sequelize.BOOLEAN,
         default: false,
       },
+      user_type: {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
     },
     {
       tableName: "users",

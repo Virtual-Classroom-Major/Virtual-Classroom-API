@@ -28,6 +28,7 @@ exports.signUp = async (req, res) => {
     user_id: newUser.id,
     is_used: false,
   });
+
   verifyEmail(newUser, token);
   res.status(200).send({
     message: "User Created Successfully",
@@ -57,9 +58,36 @@ exports.signIn = async (req, res) => {
     });
     return;
   }
+  console.log(user);
   res.status(200).send({
     data: user,
     success: true,
     message: "User Login Successful",
+  });
+};
+
+exports.updateProfileType = async (req, res) => {
+  console.log(req.params.id);
+  const { id } = req.params;
+  const { user_type } = req.body;
+  const user = await User.findOne({
+    where: {
+      id: id,
+    },
+  });
+  if (!user) {
+    res.status(200).send({
+      success: false,
+      message: "Email Not Found",
+    });
+    return;
+  }
+  await User.update({ user_type: user_type }, { where: { id: id } });
+  user.user_type = user_type;
+
+  res.status(200).send({
+    data: user,
+    success: true,
+    message: "User Type Updated",
   });
 };
