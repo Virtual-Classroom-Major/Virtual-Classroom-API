@@ -1,0 +1,117 @@
+const { uuid } = require("uuidv4");
+const db = require("../models");
+const Classes = db.class;
+
+//create class
+exports.createClass = async (req, res) => {
+  const {
+    subject_id,
+    start_time,
+    duration,
+    title,
+    faculty_id,
+    target_batch,
+    target_section,
+  } = req.body;
+
+  try {
+    const newClass = await Classes.create({
+      id: uuid(),
+      subject_id,
+      start_time,
+      duration,
+      title,
+      faculty_id,
+      target_batch,
+      target_section,
+    });
+    res.status(200).send({
+      data: newClass,
+      success: true,
+      message: "Class created",
+    });
+  } catch (err) {
+    res.status(200).send({
+      data: {},
+      success: false,
+      message: err.message,
+    });
+  }
+};
+
+//find class by faculty_id
+exports.findClassByFacultyId = async (req, res) => {
+  const { faculty_id } = req.body;
+
+  try {
+    const classes_by_faculty_Id = await Classes.findAll({
+      where: {
+        faculty_id: faculty_id,
+      },
+    });
+
+    res.status(200).send({
+      data: classes_by_faculty_Id,
+      success: true,
+      message: "Classes Found",
+    });
+  } catch (err) {
+    res.status(200).send({
+      data: {},
+      success: false,
+      message: err.message,
+    });
+  }
+};
+
+//find classes by batch
+exports.findClassByBatch = async (req, res) => {
+  const { target_batch } = req.body;
+
+  try {
+    const classes_by_batch = await Classes.findAll({
+      where: {
+        target_batch: target_batch,
+      },
+    });
+
+    res.status(200).send({
+      data: classes_by_batch,
+      success: true,
+      message: "Classes Found",
+    });
+  } catch (err) {
+    res.status(200).send({
+      data: {},
+      success: false,
+      message: err.message,
+    });
+  }
+};
+
+//delete class
+exports.deleteClass = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    await Classes.destroy({
+      where: {
+        id: id,
+      },
+    });
+
+    res.status(200).send({
+      data: {},
+      success: true,
+      message: "Class deleted",
+    });
+  } catch (err) {
+    res.status(200).send({
+      data: {},
+      success: false,
+      message: err.message,
+    });
+  }
+};
+
+//edit class

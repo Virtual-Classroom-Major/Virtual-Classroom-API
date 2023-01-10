@@ -8,6 +8,9 @@ db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
 db.user = require("./user")(sequelize, Sequelize);
+db.studentUser = require("./student_user")(sequelize, Sequelize);
+db.facultyUser = require("./faculty_user")(sequelize, Sequelize);
 db.emailVerified = require("./emailVerified")(sequelize, Sequelize);
+db.class = require("./class")(sequelize, Sequelize);
 
 module.exports = db;
