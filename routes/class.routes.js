@@ -7,7 +7,7 @@ const {
   deleteClass,
 } = require("../controllers/class.controller");
 
-router.get("/by-faculty-id", findClassByFacultyId);
+router.get("/by-faculty-id/:id", findClassByFacultyId);
 router.get("/by-batch", findClassByBatch);
 router.post("/", createClass);
 router.delete("/:id", deleteClass);

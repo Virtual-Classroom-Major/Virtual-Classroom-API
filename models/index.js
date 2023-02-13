@@ -12,5 +12,6 @@ db.studentUser = require("./student_user")(sequelize, Sequelize);
 db.facultyUser = require("./faculty_user")(sequelize, Sequelize);
 db.emailVerified = require("./emailVerified")(sequelize, Sequelize);
 db.class = require("./class")(sequelize, Sequelize);
+db.subject = require("./subject")(sequelize, Sequelize);
 
 module.exports = db;

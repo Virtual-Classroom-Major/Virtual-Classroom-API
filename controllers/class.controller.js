@@ -1,6 +1,7 @@
 const { uuid } = require("uuidv4");
 const db = require("../models");
 const Classes = db.class;
+const Subject = db.subject;
 
 //create class
 exports.createClass = async (req, res) => {
@@ -12,6 +13,7 @@ exports.createClass = async (req, res) => {
     faculty_id,
     target_batch,
     target_section,
+    color,
   } = req.body;
 
   try {
@@ -24,6 +26,7 @@ exports.createClass = async (req, res) => {
       faculty_id,
       target_batch,
       target_section,
+      color,
     });
     res.status(200).send({
       data: newClass,
@@ -41,27 +44,34 @@ exports.createClass = async (req, res) => {
 
 //find class by faculty_id
 exports.findClassByFacultyId = async (req, res) => {
-  const { faculty_id } = req.body;
+  const { id } = req.params;
 
-  try {
-    const classes_by_faculty_Id = await Classes.findAll({
-      where: {
-        faculty_id: faculty_id,
-      },
-    });
+  // try {
+  console.log(id);
+  const classes_by_faculty_Id = await Classes.findAll({
+    where: {
+      faculty_id: id,
+    },
+  });
+  // console.log("op", classes_by_faculty_Id);
+  // const subject_of_class = await Subject.findAll({
+  //   where: {
+  //     id: classes_by_faculty_Id.subject_id,
+  //   },
+  // });
 
-    res.status(200).send({
-      data: classes_by_faculty_Id,
-      success: true,
-      message: "Classes Found",
-    });
-  } catch (err) {
-    res.status(200).send({
-      data: {},
-      success: false,
-      message: err.message,
-    });
-  }
+  res.status(200).send({
+    data: classes_by_faculty_Id,
+    success: true,
+    message: "Classes Found",
+  });
+  // } catch (err) {
+  //   res.status(200).send({
+  //     data: {},
+  //     success: false,
+  //     message: err.message,
+  //   });
+  // }
 };
 
 //find classes by batch

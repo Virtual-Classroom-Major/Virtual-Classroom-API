@@ -34,6 +34,10 @@ module.exports = (sequelize, Sequelize) => {
         type: Sequelize.STRING,
         allowNull: false,
       },
+      color: {
+        type: Sequelize.ARRAY(Sequelize.INTEGER),
+        allowNull: false,
+      },
     },
     {
       tableName: "classes",
