@@ -8,39 +8,39 @@ module.exports = (sequelize, Sequelize) => {
       },
       parent_id: {
         type: Sequelize.STRING,
-        allowNull: false,
+        allowNull: true,
       },
       roll_number: {
         type: Sequelize.STRING,
-        allowNull: false,
+        allowNull: true,
       },
       reg_number: {
         type: Sequelize.STRING,
-        allowNull: false,
+        allowNull: true,
       },
       batch: {
         type: Sequelize.INTEGER,
-        allowNull: false,
+        allowNull: true,
       },
       stream: {
         type: Sequelize.STRING,
-        allbatchowNull: false,
+        allbatchowNull: true,
       },
       degree_name: {
         type: Sequelize.STRING,
-        allowNull: false,
+        allowNull: true,
       },
       date_of_birth: {
         type: Sequelize.DATEONLY,
-        allowNull: false,
+        allowNull: true,
       },
       parent_name: {
         type: Sequelize.STRING,
-        allowNull: false,
+        allowNull: true,
       },
       location: {
         type: Sequelize.STRING,
-        allowNull: false,
+        allowNull: true,
       },
     },
     {

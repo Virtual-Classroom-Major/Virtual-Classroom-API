@@ -16,10 +16,11 @@ exports.createClass = async (req, res) => {
     color,
   } = req.body;
 
+  console.log(req.body);
   try {
     const newClass = await Classes.create({
       id: uuid(),
-      subject_id,
+      subjectId: subject_id,
       start_time,
       duration,
       title,
@@ -52,6 +53,7 @@ exports.findClassByFacultyId = async (req, res) => {
     where: {
       faculty_id: id,
     },
+    include: Subject,
   });
   // console.log("op", classes_by_faculty_Id);
   // const subject_of_class = await Subject.findAll({

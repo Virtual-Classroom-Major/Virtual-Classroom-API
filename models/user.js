@@ -32,6 +32,10 @@ module.exports = (sequelize, Sequelize) => {
         type: Sequelize.STRING,
         allowNull: true,
       },
+      profile_img: {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
     },
     {
       tableName: "users",

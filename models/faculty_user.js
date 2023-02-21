@@ -8,31 +8,31 @@ module.exports = (sequelize, Sequelize) => {
       },
       parent_id: {
         type: Sequelize.STRING,
-        allowNull: false,
+        allowNull: true,
       },
       employee_id: {
         type: Sequelize.STRING,
-        allowNull: false,
+        allowNull: true,
       },
       department: {
         type: Sequelize.STRING,
-        allbatchowNull: false,
+        allbatchowNull: true,
       },
       experience: {
         type: Sequelize.INTEGER,
-        allowNull: false,
+        allowNull: true,
       },
       date_of_joining: {
         type: Sequelize.DATEONLY,
-        allowNull: false,
+        allowNull: true,
       },
       spouse_name: {
         type: Sequelize.STRING,
-        allowNull: false,
+        allowNull: true,
       },
       location: {
         type: Sequelize.STRING,
-        allowNull: false,
+        allowNull: true,
       },
     },
     {

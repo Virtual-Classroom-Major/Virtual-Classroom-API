@@ -86,6 +86,7 @@ exports.getUser = async (req, res) => {
       id: id,
     },
   });
+
   if (!user) {
     res.status(200).send({
       success: false,
@@ -135,6 +136,18 @@ exports.updateProfileType = async (req, res) => {
   await User.update({ user_type: user_type }, { where: { id: id } });
   user.user_type = user_type;
 
+  if (user_type === STUDENT) {
+    await StudentUser.create({
+      id: uuid(),
+      parent_id: id,
+    });
+  } else if (user_type === FACULTY) {
+    await FacultyUser.create({
+      id: uuid(),
+      parent_id: id,
+    });
+  }
+
   res.status(200).send({
     data: user,
     success: true,
@@ -146,73 +159,96 @@ exports.updateProfileDetails = async (req, res) => {
   console.log(req.body);
   console.log(req.params.id);
   const { id } = req.params;
-  const { user_type, first_name, last_name } = req.body;
-  const user = await User.findOne({
-    where: {
-      id: id,
-    },
-  });
-  if (!user) {
+  const { user_type, first_name, last_name, profile_img } = req.body;
+
+  try {
+    const user = await User.findOne({
+      where: {
+        id: id,
+      },
+    });
+
+    if (!user) {
+      res.status(200).send({
+        success: false,
+        message: "User Not Found",
+      });
+      return;
+    }
+
+    await User.update(
+      {
+        first_name: first_name,
+        last_name: last_name,
+        profile_img: profile_img,
+      },
+      { where: { id: id } }
+    );
+    if (user_type === STUDENT) {
+      const {
+        roll_number,
+        batch,
+        reg_number,
+        stream,
+        degree_name,
+        date_of_birth,
+        parent_name,
+        location,
+      } = req.body;
+      await StudentUser.update(
+        {
+          roll_number: roll_number,
+          reg_number: reg_number,
+          batch: batch,
+          stream: stream,
+          degree_name: degree_name,
+          date_of_birth: date_of_birth,
+          parent_name: parent_name,
+          location: location,
+        },
+        {
+          where: {
+            parent_id: id,
+          },
+        }
+      );
+    } else if (user_type === FACULTY) {
+      const {
+        employee_id,
+        department,
+        experience,
+        date_of_joining,
+        spouse_name,
+        location,
+      } = req.body;
+      await FacultyUser.update(
+        {
+          employee_id: employee_id,
+          department: department,
+          experience: experience,
+          date_of_joining: date_of_joining,
+          spouse_name: spouse_name,
+          location: location,
+        },
+        {
+          where: {
+            parent_id: id,
+          },
+        }
+      );
+    }
+
+    res.status(200).send({
+      data: user,
+      success: true,
+      message: "User Details Updated",
+    });
+  } catch (err) {
     res.status(200).send({
       success: false,
-      message: "User Not Found",
-    });
-    return;
-  }
-
-  await User.update(
-    { first_name: first_name, last_name: last_name },
-    { where: { id: id } }
-  );
-  if (user_type === STUDENT) {
-    const {
-      roll_number,
-      batch,
-      reg_number,
-      stream,
-      degree_name,
-      date_of_birth,
-      parent_name,
-      location,
-    } = req.body;
-    await StudentUser.create({
-      id: uuid(),
-      parent_id: id,
-      roll_number: roll_number,
-      reg_number: reg_number,
-      batch: batch,
-      stream: stream,
-      degree_name: degree_name,
-      date_of_birth: date_of_birth,
-      parent_name: parent_name,
-      location: location,
-    });
-  } else if (user_type === FACULTY) {
-    const {
-      employee_id,
-      department,
-      experience,
-      date_of_joining,
-      spouse_name,
-      location,
-    } = req.body;
-    await FacultyUser.create({
-      id: uuid(),
-      parent_id: id,
-      employee_id: employee_id,
-      department: department,
-      experience: experience,
-      date_of_joining: date_of_joining,
-      spouse_name: spouse_name,
-      location: location,
+      message: `User Details Update Failed ${err.message}`,
     });
   }
-
-  res.status(200).send({
-    data: user,
-    success: true,
-    message: "User Details Updated",
-  });
 };
 
 exports.cacheUserData = async (req, res) => {
