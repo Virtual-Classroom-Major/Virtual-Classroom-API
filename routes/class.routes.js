@@ -11,8 +11,5 @@ router.get("/by-faculty-id/:id", findClassByFacultyId);
 router.get("/by-batch", findClassByBatch);
 router.post("/", createClass);
 router.delete("/:id", deleteClass);
-// router.post("/update-profile", updateProfile);
 
 module.exports = router;
-
-//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

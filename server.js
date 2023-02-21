@@ -4,6 +4,7 @@ const PORT = 8080;
 const cors = require("cors");
 const user_routes = require("./routes/user.routes");
 const class_routes = require("./routes/class.routes");
+const subject_routes = require("./routes/subject.routes");
 
 app.use(cors());
 
@@ -13,6 +14,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use("/api/v1/users", user_routes);
 app.use("/api/v1/class", class_routes);
+app.use("/api/v1/subject", subject_routes);
 
 app.get("/", (req, res) => {
   res.send("WELCOME TO VIRTUAL CLASSROOM SERVER V1.0");

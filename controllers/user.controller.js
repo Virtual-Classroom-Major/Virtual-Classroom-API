@@ -4,6 +4,8 @@ const StudentUser = db.studentUser;
 const FacultyUser = db.facultyUser;
 const EmailVerified = db.emailVerified;
 
+const client = require("../configs/redisClient");
+
 const jwt = require("jsonwebtoken");
 const { uuid } = require("uuidv4");
 const bcrypt = require("bcrypt");
@@ -43,11 +45,16 @@ exports.signUp = async (req, res) => {
 
 exports.signIn = async (req, res) => {
   const { email, password } = req.body;
-  const user = await User.findOne({
-    where: {
-      email: email,
-    },
-  });
+  //uncommnet of pg db service
+  // const user = await User.findOne({
+  //   where: {
+  //     email: email,
+  //   },
+  // });
+
+  //uncomment for redis cache service
+  let user = await client.get(email);
+  user = JSON.parse(user);
   if (!user) {
     res.status(200).send({
       success: false,
@@ -206,4 +213,19 @@ exports.updateProfileDetails = async (req, res) => {
     success: true,
     message: "User Details Updated",
   });
+};
+
+exports.cacheUserData = async (req, res) => {
+  const userData = await User.findAll({});
+  userData.map((user) => {
+    client.set(user.email, JSON.stringify(user));
+    client.set(user.id, JSON.stringify(user));
+  });
+  res.send("users cached");
+};
+
+exports.findCachedUserById = async (req, res) => {
+  const { id } = req.params;
+  const data = await client.get(id);
+  res.send(JSON.parse(data));
 };

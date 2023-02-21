@@ -14,4 +14,12 @@ db.emailVerified = require("./emailVerified")(sequelize, Sequelize);
 db.class = require("./class")(sequelize, Sequelize);
 db.subject = require("./subject")(sequelize, Sequelize);
 
+//Association
+
+//subjects
+db.subject.hasMany(db.class);
+
+//classes
+db.class.belongsTo(db.subject);
+
 module.exports = db;

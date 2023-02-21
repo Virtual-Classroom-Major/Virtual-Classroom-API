@@ -6,10 +6,6 @@ module.exports = (sequelize, Sequelize) => {
         type: Sequelize.STRING,
         primaryKey: true,
       },
-      subject_id: {
-        type: Sequelize.STRING,
-        allowNull: false,
-      },
       start_time: {
         type: Sequelize.TIME,
         allowNull: false,
