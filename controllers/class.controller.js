@@ -3,6 +3,22 @@ const db = require("../models");
 const Classes = db.class;
 const Subject = db.subject;
 
+//get class by id
+exports.getClass = async (req, res) => {
+  const { id } = req.params;
+  const classes_by_Id = await Classes.findAll({
+    where: {
+      id: id,
+    },
+    include: Subject,
+  });
+  res.status(200).send({
+    data: classes_by_Id,
+    success: true,
+    message: "Classes Found",
+  });
+};
+
 //create class
 exports.createClass = async (req, res) => {
   const {
