@@ -13,6 +13,7 @@ db.facultyUser = require("./faculty_user")(sequelize, Sequelize);
 db.emailVerified = require("./emailVerified")(sequelize, Sequelize);
 db.class = require("./class")(sequelize, Sequelize);
 db.subject = require("./subject")(sequelize, Sequelize);
+db.attendance = require("./attendance")(sequelize, Sequelize);
 
 //Association
 
@@ -22,4 +23,10 @@ db.subject.hasMany(db.class);
 //classes
 db.class.belongsTo(db.subject);
 
+db.user.hasOne(db.attendance, {
+  foreignKey: "studentId",
+});
+db.attendance.belongsTo(db.user);
+
+// sequelize.sync();
 module.exports = db;

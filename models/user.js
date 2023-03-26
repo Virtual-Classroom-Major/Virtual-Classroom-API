@@ -3,7 +3,7 @@ module.exports = (sequelize, Sequelize) => {
     "users",
     {
       id: {
-        type: Sequelize.STRING,
+        type: Sequelize.UUID,
         primaryKey: true,
       },
       roll_number: {
