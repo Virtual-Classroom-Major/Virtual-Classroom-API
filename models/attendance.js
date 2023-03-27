@@ -14,6 +14,10 @@ module.exports = (sequelize, Sequelize) => {
         type: Sequelize.STRING,
         allowNull: false,
       },
+      subject_id: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
     },
     {
       tableName: "attendance",

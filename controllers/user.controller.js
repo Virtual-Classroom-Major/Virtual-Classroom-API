@@ -41,6 +41,7 @@ exports.signUp = async (req, res) => {
     data: newUser,
     success: true,
   });
+  this.cacheUserDataSync();
 };
 
 exports.signIn = async (req, res) => {
@@ -153,6 +154,8 @@ exports.updateProfileType = async (req, res) => {
     success: true,
     message: "User Type Updated",
   });
+
+  this.cacheUserDataSync();
 };
 
 exports.updateProfileDetails = async (req, res) => {
@@ -181,6 +184,7 @@ exports.updateProfileDetails = async (req, res) => {
         first_name: first_name,
         last_name: last_name,
         profile_img: profile_img,
+        profile_updated: true,
       },
       { where: { id: id } }
     );
@@ -243,12 +247,22 @@ exports.updateProfileDetails = async (req, res) => {
       success: true,
       message: "User Details Updated",
     });
+
+    this.cacheUserDataSync();
   } catch (err) {
     res.status(200).send({
       success: false,
       message: `User Details Update Failed ${err.message}`,
     });
   }
+};
+
+exports.cacheUserDataSync = async () => {
+  const userData = await User.findAll({});
+  userData.map((user) => {
+    client.set(user.email, JSON.stringify(user));
+    client.set(user.id, JSON.stringify(user));
+  });
 };
 
 exports.cacheUserData = async (req, res) => {
@@ -264,4 +278,37 @@ exports.findCachedUserById = async (req, res) => {
   const { id } = req.params;
   const data = await client.get(id);
   res.send(JSON.parse(data));
+};
+
+exports.verifyEmail = async (req, res) => {
+  const { token } = req.params;
+  const user_to_verify = await EmailVerified.findOne({
+    where: {
+      token: token,
+      is_used: false,
+    },
+  });
+  if (user_to_verify) {
+    await User.update(
+      {
+        email_verified: true,
+      },
+      {
+        where: {
+          id: user_to_verify.user_id,
+        },
+      }
+    );
+    this.cacheUserDataSync();
+  } else {
+    res.send({
+      success: false,
+      message: "Invalid Verification Link",
+    });
+    return;
+  }
+  res.send({
+    success: true,
+    message: "Email verified successfully",
+  });
 };
