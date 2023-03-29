@@ -1,6 +1,7 @@
 const { uuid } = require("uuidv4");
 const db = require("../models");
 const Classes = db.class;
+const StudentUser = db.studentUser;
 const Subject = db.subject;
 
 //get class by id
@@ -94,13 +95,20 @@ exports.findClassByFacultyId = async (req, res) => {
 
 //find classes by batch
 exports.findClassByBatch = async (req, res) => {
-  const { target_batch } = req.body;
+  const { userId } = req.params;
 
   try {
+    const studentDetails = await StudentUser.findOne({
+      where: {
+        parent_id: userId,
+      },
+    });
+
     const classes_by_batch = await Classes.findAll({
       where: {
-        target_batch: target_batch,
+        target_batch: studentDetails.batch,
       },
+      include: Subject,
     });
 
     res.status(200).send({
